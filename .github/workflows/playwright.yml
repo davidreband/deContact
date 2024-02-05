@@ -16,7 +16,5 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Start 
-      run: npm run dev
-    - name: Run Playwright tests
-      run: npx playwright test test.spec.js 
+      run: npm run dev & npx playwright test test.spec.js 
     
