@@ -47,7 +47,7 @@ async function OpenNewBrowser(user) {
 	//await page.goto('http://www.decontact.xyz/');
 
 
-	await page.getByRole('button', { name: 'Continue' }).click();
+	//await page.getByRole('button', { name: 'Continue' }).click();
 	//await page.getByRole('button', { name: 'Generate New' }).click();
 	//await page.getByLabel('My Handle').click();
 	//await page.getByLabel('My Handle').fill(user.identity);
