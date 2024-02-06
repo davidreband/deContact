@@ -45,7 +45,7 @@ async function OpenNewBrowser(user) {
 
 	await page.goto('http://localhost:5173/');
 	//await page.goto('http://www.decontact.xyz/');
-/*
+
 
 	await page.getByRole('button', { name: 'Continue' }).click();
 	await page.getByRole('button', { name: 'Generate New' }).click();
@@ -54,7 +54,7 @@ async function OpenNewBrowser(user) {
 	await page.getByLabel('DID').click();
 	user.did = await page.getByLabel('DID').inputValue();
 
-
+/*
 
 	await page.getByRole('tab', { name: 'My Address' }).click();
 	
