@@ -20,5 +20,5 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps  
     - name: Start 
-      run: npm run dev & npx playwright test test.spec.js 
+      run: npm run dev & npx playwright test test2.spec.js 
     
