@@ -36,7 +36,7 @@ const users = [
 
 async function OpenNewBrowser(user) {
 	const browser = await chromium.launch({
-		//headless: false
+		headless: true
 	});
 
 	const context = await browser.newContext();
