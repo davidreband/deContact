@@ -43,12 +43,12 @@ async function OpenNewBrowser(user) {
 	const context = await browser.newContext();
 	const page = await context.newPage();
 
-	await page.goto('http://localhost:5173/');
-	//await page.goto('http://www.decontact.xyz/');
+	//await page.goto('http://localhost:5173/');
+	await page.goto('http://www.decontact.xyz/');
 
 
-	//await page.getByRole('button', { name: 'Continue' }).click();
-	//await page.getByRole('button', { name: 'Generate New' }).click();
+	await page.getByRole('button', { name: 'Continue' }).click();
+	await page.getByRole('button', { name: 'Generate New' }).click();
 	//await page.getByLabel('My Handle').click();
 	//await page.getByLabel('My Handle').fill(user.identity);
 	//await page.getByLabel('DID').click();
