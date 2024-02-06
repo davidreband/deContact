@@ -45,7 +45,7 @@ async function OpenNewBrowser(user) {
 
 	await page.goto('http://localhost:5173/');
 	//await page.goto('http://www.decontact.xyz/');
-
+/*
 
 	await page.getByRole('button', { name: 'Continue' }).click();
 	await page.getByRole('button', { name: 'Generate New' }).click();
@@ -75,6 +75,7 @@ async function OpenNewBrowser(user) {
 	await page.getByPlaceholder('Enter country...').click();
 	await page.getByPlaceholder('Enter country...').fill(user.country );
 	await page.getByRole('button', { name: 'Add' }).click({ timeout: 50000 });
+  */
 	return page;
 }
 
@@ -84,6 +85,6 @@ test('test', async () => {
    //await page.goto('http://localhost:5173/');
 
    	const page = await OpenNewBrowser(users[0]);
-		const page2 = await OpenNewBrowser(users[1]);
+		//const page2 = await OpenNewBrowser(users[1]);
 	
 });
