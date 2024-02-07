@@ -35,6 +35,10 @@ jobs:
       with:
         path: ./build
     - uses: actions/deploy-pages@v4
+    - name: Install Playwright Browsers
+        run: npx playwright install --with-deps  
+    - name: Start 
+      run:  npx playwright test test.spec.js 
       
  # deploy:
     # Add a dependency to the build job
