@@ -23,7 +23,7 @@ const multiaddrs =
 
 
 const pubSubPeerDiscoveryTopics = [
-	import.meta.env.MODE == 'development'
+	import.meta.env.MODE != 'development'
 		? `dev-dcontact._peer-discovery._p2p._pubsub`
 		: `dcontact._peer-discovery._p2p._pubsub`
 ];
