@@ -29,6 +29,7 @@ jobs:
         npm run build:fixed      
         sed -i 's|/service-worker.js|./service-worker.js|g' build/index.html    
         sed -i 's|"/"|"./"|g' build/_app/immutable/entry/app.*.js
+        sed -i 's|/_app/version.json|./_app/version.json|g' build/_app/immutable/chunks/entry.*.js
     - uses: actions/upload-pages-artifact@v3
       with:
         path: ./build
