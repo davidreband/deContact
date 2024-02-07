@@ -28,10 +28,11 @@ jobs:
         npm install
         npm run build:fixed      
         sed -i 's|/service-worker.js|./service-worker.js|g' build/index.html  
+        sed -i 's|/_app/version.json|./_app/version.json|g' entry.*.js
     - uses: actions/upload-pages-artifact@v3
       with:
         path: ./build
-    - uses: actions/deploy-pages@v4 
+    - uses: actions/deploy-pages@v4
       
  # deploy:
     # Add a dependency to the build job
