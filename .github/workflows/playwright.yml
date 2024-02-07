@@ -6,7 +6,7 @@ on:
     branches: [ githubCI ]
 
 jobs:
-  test:
+  build:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
