@@ -23,7 +23,10 @@ jobs:
     - name: Install dependencies
       run: |
         npm install
-        npm run build    
+        npm run build
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./build
     - uses: actions/deploy-pages@v4 # or specific "vX.X.X" version tag for this action  
       
  # deploy:
