@@ -28,7 +28,7 @@ jobs:
         npm install
         npm run build:fixed      
         sed -i 's|/service-worker.js|./service-worker.js|g' build/index.html    
-        sed -i 's|fe={"/":[2]}|fe={"./":[2]}|g' build/_app/immutable/chunks/entry.*.js
+        sed -i 's|fe={"/":[2]}|fe={"./":[2]}|g' build/_app/immutable/chunks/entry/app.*.js
     - uses: actions/upload-pages-artifact@v3
       with:
         path: ./build
