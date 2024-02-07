@@ -26,8 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         npm install
-        npm run build:fixed
-      run: |
+        npm run build:fixed      
         sed -i 's|/service-worker.js|./service-worker.js|g' build/index.html  
     - uses: actions/upload-pages-artifact@v3
       with:
