@@ -16,6 +16,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }} 
+      env:
+        - VITE_SEED_NODES:  ${{ secrets.VITE_SEED_NODES }} 
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
