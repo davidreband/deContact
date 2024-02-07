@@ -18,6 +18,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }} 
     env:
       VITE_SEED_NODES:  ${{ secrets.VITE_SEED_NODES }} 
+      VITE_DEV_P2P_PUPSUB: ${{ secrets.VITE_P2P_PUPSUB }} 
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
