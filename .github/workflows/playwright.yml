@@ -39,11 +39,11 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps  
     - name: Start 
-      run:  npx playwright test test2.spec.js 
+      run:  npx playwright test test.spec.js 
       
  # deploy:
     # Add a dependency to the build job
-  #  needs: build
+  #  needs: build 
 
   #     sed -i 's|/_app/version.json|./_app/version.json|g' build/_app/immutable/chunks/entry.*.js
 
