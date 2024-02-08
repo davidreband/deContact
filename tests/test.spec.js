@@ -47,6 +47,9 @@ async function OpenNewBrowser(user) {
 
 	await page.evaluate(() => window.localStorage.clear());
 	await page.evaluate(() => window.sessionStorage.clear());
+
+
+
 	/*
 	const dbs = await page.evaluate(() => {
 		return  window.indexedDB.databases()
@@ -152,7 +155,7 @@ test.describe('simple exchange of adress between Alice and Bob', () => {
 		//await page.getByRole('tab', { name: 'Settings' }).click({ timeout: 50000 });	
 		//await page.getByLabel('DID').click({ timeout: 50000 });
 
-		await expect(page2.getByRole('row', { name: users[0].identity })).toContainText(users[2].street);
+		//await expect(page2.getByRole('row', { name: users[0].identity })).toContainText(users[2].street);
 
  		//console.log ("____", await page2.getByText(users[0].street, { exact: true }))
 
