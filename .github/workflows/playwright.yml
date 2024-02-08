@@ -38,7 +38,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps  
     - name: Start 
-      run:  npx playwright test test.spec.js 
+      run:  npx playwright test test2.spec.js 
       
  # deploy:
     # Add a dependency to the build job
