@@ -45,8 +45,6 @@ async function OpenNewBrowser(user) {
 
 	const page_url = process.env.PAGE_URL;
 
-
-	console.log("___", page_url)	
 	await page.goto(page_url);
 
   
@@ -55,19 +53,12 @@ async function OpenNewBrowser(user) {
 
 	await page.getByRole('button', { name: 'Continue' }).click();
 	await page.getByRole('button', { name: 'Generate New' }).click();
-	//await page.getByLabel('My Handle').click();
-	//await page.getByLabel('My Handle').fill(user.identity);
-	//await page.getByLabel('DID').click();
-	//user.did = await page.getByLabel('DID').inputValue();
-
-/*
+	await page.getByRole('tab', { name: 'Settings' }).click();
+	await page.getByLabel('DID', { exact: true }).click();
+	user.did = await page.getByLabel('DID', { exact: true }).inputValue();
 
 	await page.getByRole('tab', { name: 'My Address' }).click();
-	
-	//await page.getByRole('tab', { name: 'Settings' }).click();
-	//await page.getByLabel('My Identity').click();
-	//await page.getByLabel('My Identity').fill(user.identity);
-	await page.getByRole('tab', { name: 'My Address' }).click();
+  await page.getByRole('tab', { name: 'My Address' }).click();
 	await page.getByPlaceholder('Enter firstname...').click();
 	await page.getByPlaceholder('Enter firstname...').fill(user.firstname);
 	await page.getByPlaceholder('Enter lastname...').click();
@@ -81,8 +72,8 @@ async function OpenNewBrowser(user) {
 	await page.getByPlaceholder('Enter country...').click();
 	await page.getByPlaceholder('Enter country...').fill(user.country );
 	await page.getByRole('button', { name: 'Add' }).click({ timeout: 50000 });
-  */
 	return page;
+	
 }
 
 

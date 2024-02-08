@@ -44,39 +44,17 @@ async function OpenNewBrowser(user) {
 
 	const page_url = process.env.PAGE_URL;
 
-	
-
-	//console.log("___", process.env)
-	console.log("___", process.env.PAGE_URL)
-
-	
 	await page.goto(page_url);
 	//await page.goto('http://www.decontact.xyz/');
 	//await page.goto('https://davidreband.github.io/deContact/');	
-
-
-
-
-/*
-
-	await page.goto('https://davidreband.github.io/deContact/');
-  await page.goto('https://davidreband.github.io/deContact');
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await page.getByRole('button', { name: 'Generate New' }).click();
-  await page.getByRole('tab', { name: 'Settings' }).click();
-  await page.getByLabel('DID').dblclick();
-  await page.getByRole('tab', { name: 'My Address' }).click();
-  await page.getByPlaceholder('Enter firstname...').click();
-*/
 
 	await page.getByRole('button', { name: 'Continue' }).click();
 	await page.getByRole('button', { name: 'Generate New' }).click();
 	//await page.getByLabel('My Handle').click();
 	//await page.getByLabel('My Handle').fill(user.identity);
 	await page.getByRole('tab', { name: 'Settings' }).click();
-	await page.getByLabel('DID').click();
-	user.did = await page.getByLabel('DID').inputValue();
-
+	await page.getByLabel('DID', { exact: true }).click();
+	user.did = await page.getByLabel('DID', { exact: true }).inputValue();
 
 
 	await page.getByRole('tab', { name: 'My Address' }).click();
