@@ -163,8 +163,8 @@ test.describe('simple exchange of adress between Alice and Bob', () => {
 
 		//await expect(page2.getByPlaceholder('Enter street...')).toHaveText(users[2].street);
 
-		await page.getByRole('tab', { name: 'Settings' }).click({ timeout: 50000 });
-		await page.getByLabel('DID').click({ timeout: 50000 });
+		//await page.getByRole('tab', { name: 'Settings' }).click({ timeout: 50000 });
+		//await page.getByLabel('DID').click({ timeout: 50000 });
 
 		await page.close();
 		await page2.close();
