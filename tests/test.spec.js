@@ -55,10 +55,25 @@ async function OpenNewBrowser(user) {
 	//await page.goto('https://davidreband.github.io/deContact/');	
 
 
+
+
+/*
+
+	await page.goto('https://davidreband.github.io/deContact/');
+  await page.goto('https://davidreband.github.io/deContact');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Generate New' }).click();
+  await page.getByRole('tab', { name: 'Settings' }).click();
+  await page.getByLabel('DID').dblclick();
+  await page.getByRole('tab', { name: 'My Address' }).click();
+  await page.getByPlaceholder('Enter firstname...').click();
+*/
+
 	await page.getByRole('button', { name: 'Continue' }).click();
 	await page.getByRole('button', { name: 'Generate New' }).click();
 	//await page.getByLabel('My Handle').click();
 	//await page.getByLabel('My Handle').fill(user.identity);
+	await page.getByRole('tab', { name: 'Settings' }).click();
 	await page.getByLabel('DID').click();
 	user.did = await page.getByLabel('DID').inputValue();
 
