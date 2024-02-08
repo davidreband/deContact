@@ -10,6 +10,9 @@ const config = {
 
 export default config;
 */
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 
 // @ts-check

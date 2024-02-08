@@ -42,9 +42,17 @@ async function OpenNewBrowser(user) {
 	const context = await browser.newContext();
 	const page = await context.newPage();
 
-	await page.goto('https://davidreband.github.io/deContact/');
-	//await page.goto('http://localhost:5173/');
+	const page_url = process.env.PAGE_URL;
+
+	
+
+	//console.log("___", process.env)
+	console.log("___", process.env.PAGE_URL)
+
+	
+	await page.goto(page_url);
 	//await page.goto('http://www.decontact.xyz/');
+	//await page.goto('https://davidreband.github.io/deContact/');	
 
 
 	await page.getByRole('button', { name: 'Continue' }).click();
