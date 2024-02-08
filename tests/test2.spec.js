@@ -45,12 +45,8 @@ async function OpenNewBrowser(user) {
 
 	const page_url = process.env.PAGE_URL;
 
-	
 
-	//console.log("___", process.env)
-	console.log("___", process.env.PAGE_URL)
-
-	
+	console.log("___", page_url)	
 	await page.goto(page_url);
 
   
