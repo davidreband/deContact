@@ -13,28 +13,9 @@ const users = [
 		street: 'Schulgasse 5',
 		zipcode: '84444',
 		did: '',
+		seed:'test test test test test test test test test test test test',
 		city: 'Berlin',
 		country: 'Germany'
-	},
-	{
-		identity: 'Bob',
-		firstname: 'Bob',
-		lastname: 'Dylan',
-		street: 'Schulgasse 55',
-		zipcode: '565544',
-		did: '',
-		city: 'Berlin',
-		country: 'Germany'
-	},
-	{
-		identity: 'Alice',
-		firstname: 'Alice',
-		lastname: 'Fox',
-		street: 'Schulgasse 150',
-		zipcode: '1111111',
-		did: '',
-		city: 'Rom',
-		country: 'Italy'
 	}
 ];
 
@@ -63,8 +44,9 @@ async function initializeNewPage(browser, user) {
 			await page.getByRole('button', { name: 'Continue' }).click();
 			await page.getByRole('button', { name: 'Generate New' }).click();
 			await page.getByRole('tab', { name: 'Settings' }).click();
-			await page.getByLabel('DID', { exact: true }).click();			
-			user.did = await page.getByLabel('DID', { exact: true }).inputValue();
+
+			await page.getByLabel('Seed Phrase', { exact: true }).click();	
+  		await page.getByLabel('Seed Phrase').fill(user.seed);
 			await page.getByRole('tab', { name: 'My Address' }).click();
 			await fillForm(page, user);
 			await page.getByRole('button', { name: 'Add' }).click({ timeout: 50000 });
@@ -74,41 +56,40 @@ async function initializeNewPage(browser, user) {
   }
 }
 
-test.describe('Simple exchange of adress between Alice and Bob', () => {
+
+test.describe('test - device synchronization', () => {
 	let page, page2;
 
 	test.beforeEach(async ({ browser }) => {
 		test.setTimeout(50000);
 		page = await initializeNewPage(browser, users[0]);
-		page2 = await initializeNewPage(browser, users[1]);
+		//page2 = await initializeNewPage(browser, users[0]);
 	});
 	
-	test('Alice and Bob can exchange addresses', async () => {
+	test('synchronization', async () => {
 		test.setTimeout(60000);
+
+		const context = await browser.newContext();
+			page2 = await context.newPage();
+			const page_url = process.env.PAGE_URL;
+			await page2.goto(page_url);
+
+			await page2.getByRole('button', { name: 'Continue' }).click();
+			await page2.getByRole('button', { name: 'Generate New' }).click();
+			await page2.getByRole('tab', { name: 'Settings' }).click();
+
+			await page2.getByLabel('Seed Phrase', { exact: true }).click();	
+  		await page2.getByLabel('Seed Phrase').fill(users[0].seed);
+
+			await page2.getByRole('tab', { name: 'Contacts' }).click();
+
+
+
 
 		await page2.getByRole('textbox').click({ timeout: 50000 });
 		await page2.getByRole('textbox').fill(users[0].did);
 		await page2.getByRole('button', { name: 'Scan Contact' }).click();
-		await page.getByRole('button', { name: 'Continue' }).click();
-		await page2.getByRole('button', { name: 'Continue' }).click();
-		await page.getByRole('textbox').click({ timeout: 50000 });
-		await page.getByRole('textbox').fill(users[1].did);
-		await page.getByRole('button', { name: 'Scan Contact' }).click();
-		await page2.getByRole('button', { name: 'Continue' }).click();
-		await page.getByRole('button', { name: 'Continue' }).click();
-		await page.getByRole('row', { name: users[0].identity }).locator('label').click();		
-		await page.getByPlaceholder('Enter lastname...').click();
-		await page.getByPlaceholder('Enter lastname...').fill(users[2].lastname);
-		await page.getByPlaceholder('Enter street...').click();
-		await page.getByPlaceholder('Enter street...').fill(users[2].street);
-		await page.getByPlaceholder('Enter zipcode...').click();
-		await page.getByPlaceholder('Enter zipcode...').fill(users[2].zipcode);
-		await page.getByPlaceholder('Enter city...').click();
-		await page.getByPlaceholder('Enter city...').fill(users[2].city);
-		await page.getByPlaceholder('Enter country...').fill(users[2].country);
-		await page.getByRole('button', { name: 'Update' }).click();
-		await page2.getByRole('button', { name: 'Continue' }).click();
-		await page2.getByRole('row', { name: users[0].identity }).locator('label').click();
+		
 	});
 
 	test.afterEach(async () => {
@@ -117,7 +98,5 @@ test.describe('Simple exchange of adress between Alice and Bob', () => {
 			page2.close()
 		]);
 	});
-
-
 });
 
