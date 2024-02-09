@@ -117,7 +117,5 @@ test.describe('Simple exchange of adress between Alice and Bob', () => {
 			page2.close()
 		]);
 	});
-
-
 });
 
