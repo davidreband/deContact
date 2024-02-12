@@ -118,4 +118,3 @@ test.describe('Simple exchange of adress between Alice and Bob', () => {
 		]);
 	});
 });
-
