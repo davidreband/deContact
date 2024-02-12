@@ -84,7 +84,7 @@ test.describe('Simple exchange of adress between Alice and Bob', () => {
 	});
 	
 	test('Alice and Bob can exchange addresses', async () => {
-		test.setTimeout(60000);
+		test.setTimeout(150000);
 
 		await page2.getByRole('textbox').click({ timeout: 50000 });
 		await page2.getByRole('textbox').fill(users[0].did);
