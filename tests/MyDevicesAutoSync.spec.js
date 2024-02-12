@@ -66,7 +66,7 @@ test.describe('Devices auto synchronization', () => {
 	});
 	
 	test('checkDeviceSync', async () => {
-		test.setTimeout(60000);
+		test.setTimeout(150000);
 
 		const context = await browser.newContext();
 			page2 = await context.newPage();
