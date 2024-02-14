@@ -93,9 +93,15 @@ test.describe('Simple exchange of adress between Alice and Bob', () => {
 		await page2.getByRole('tab', { name: 'Contacts' }).click({ timeout: 250000 });
 		await page2.getByRole('textbox', { role: 'scanContact' }).click();
 		await page2.getByRole('textbox', { role: 'scanContact' }).fill(users[0].did);
-		await page2.getByRole('button', { name: 'Scan Contact' }).click({ timeout: 50000 });
+		await page2.getByRole('button', { name: 'Scan Contact' }).click({ timeout: 150000 });
+		
+		await page2.getByRole('button', { name: 'Scan Contact' }).click({ timeout: 150000 });
 
 		await page.getByRole('button', { name: 'Exchange Contact Data' }).click({ timeout: 50000 });
+
+		//await page.getByText('Seed Node connected 1').click({
+    button: 'right'
+  });
 		//await page2.getByRole('button', { name: 'Scan Contact' }).click({ timeout: 50000 });
 
 		//await page.getByRole('button', { name: 'Exchange Contact Data' }).click();

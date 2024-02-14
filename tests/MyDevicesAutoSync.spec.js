@@ -42,10 +42,12 @@ async function initializeNewPage(browser, user) {
 			await page.evaluate(() => window.localStorage.clear());
 			await page.evaluate(() => window.sessionStorage.clear());
 			await page.getByRole('button', { name: 'Continue' }).click();
+			await page.getByRole('button', { name: 'Enter Existing Seed Phrase' }).click();			
 			await page.getByRole('button', { name: 'Enter Existing Seed Phrase' }).click();
 			await page.getByRole('tab', { name: 'Settings' }).click();
 			await page.getByLabel('Seed Phrase', { exact: true }).click();	
   		await page.getByLabel('Seed Phrase').fill(user.seed);
+			await page.getByRole('button', { name: 'Enter Existing Seed Phrase' }).click();
 			await page.getByRole('tab', { name: 'My Address' }).click();
 			await fillForm(page, user);
 			await page.getByRole('button', { name: 'Add' }).click({ timeout: 50000 });
@@ -73,6 +75,7 @@ test.describe('Devices auto synchronization', () => {
 			const page_url = process.env.PAGE_URL;
 			await page2.goto(page_url);
 			await page2.getByRole('button', { name: 'Continue' }).click();
+			await page2.getByRole('button', { name: 'Enter Existing Seed Phrase' }).click();
 			await page2.getByRole('button', { name: 'Enter Existing Seed Phrase' }).click();
 			await page2.getByRole('tab', { name: 'Contacts' }).click();  
   		await page2.getByLabel('Contacts').locator('span').click();		

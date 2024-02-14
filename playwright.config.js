@@ -13,15 +13,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-<<<<<<< HEAD
-export default config;
-*/
-=======
-
->>>>>>> 257d71daaf9653b47b1780c7e6828a51d0a60327
-import dotenv from 'dotenv';
-dotenv.config();
-
 
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
