@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Self hosted runner
 on:
   push:
     branches: [ githubCI, playwright, develop ]    
@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    runs-on: deContact
     permissions:
       pages: write      # to deploy to Pages
       id-token: write   # to verify the deployment originates from an appropriate source
@@ -43,4 +43,3 @@ jobs:
       run: npx playwright test BasicAddressExchange.spec.js
     - name: Start test MyDevicesAutoSync.spec.js 
       run: npx playwright test MyDevicesAutoSync.spec.js 
-  
