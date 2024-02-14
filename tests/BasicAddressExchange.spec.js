@@ -95,7 +95,7 @@ test.describe('Simple exchange of adress between Alice and Bob', () => {
 		await page2.getByRole('textbox', { role: 'scanContact' }).fill(users[0].did);
 		await page2.getByRole('button', { name: 'Scan Contact' }).click({ timeout: 50000 });
 
-		//await page.getByRole('button', { name: 'Exchange Contact Data' }).click({ timeout: 50000 });
+		await page.getByRole('button', { name: 'Exchange Contact Data' }).click({ timeout: 50000 });
 		//await page2.getByRole('button', { name: 'Scan Contact' }).click({ timeout: 50000 });
 
 		//await page.getByRole('button', { name: 'Exchange Contact Data' }).click();
@@ -131,7 +131,7 @@ test.describe('Simple exchange of adress between Alice and Bob', () => {
 
 		*/
 		//await page2.getByRole('button', { name: 'Continue' }).click();
-		//await page2.getByRole('row', { name: users[0].identity }).locator('label').click();
+		await page2.getByRole('row', { name: users[0].identity }).locator('label').click();
 	});
 
 	test.afterEach(async () => {

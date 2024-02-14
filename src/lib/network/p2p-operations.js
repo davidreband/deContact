@@ -147,8 +147,6 @@ export async function startNetwork() {
         console.log("someone updated my addressbook with data",entry)
         getAddressRecords()
     })
-
-
 }
 async function handleMessage (dContactMessage) {
     console.log("dContactMessage",dContactMessage   )

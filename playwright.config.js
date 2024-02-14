@@ -1,15 +1,24 @@
-/** @type {import('@playwright/test').PlaywrightTestConfig} 
-const config = {
-	webServer: {
-		command: 'npm run build && npm run preview',
-		port: 4173
-	},
-	testDir: 'tests',
-	testMatch: /(.+\.)?(test|spec)\.[jt]s/
-};
+/** @type {import('@playwright/test').PlaywrightTestConfig}
+ const config = {
+ webServer: {
+ command: 'npm run build && npm run preview',
+ port: 4173
+ },
+ testDir: 'tests',
+ testMatch: /(.+\.)?(test|spec)\.[jt]s/
+ };
 
+ export default config;
+ */
+import dotenv from 'dotenv';
+dotenv.config();
+
+<<<<<<< HEAD
 export default config;
 */
+=======
+
+>>>>>>> 257d71daaf9653b47b1780c7e6828a51d0a60327
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -92,4 +101,3 @@ export default defineConfig({
 	//   reuseExistingServer: !process.env.CI,
 	// },
 });
-
