@@ -16,6 +16,7 @@
     export let sender;
 
     let businessCard
+    let buttonDisabled
 
     const getBusinessCard = async () => {
         const businessCardElements = await db.all();
@@ -27,6 +28,18 @@
     $:{
         getBusinessCard(db).then(bc => businessCard=bc)
     }
+
+    const isResipientInDB = async () => {
+        const businessCardElements = await db.all();
+        const filteredElements = businessCardElements.filter(element => {
+            return element.value.owner == data.recipient
+        });        
+        return filteredElements.length == 0 ? false : true; 
+    }
+    $:{
+        isResipientInDB().then(isResipient => buttonDisabled = isResipient)          
+    }     
+
 </script>
 <ComposedModal open on:close={() => dispatch('result', false)} on:submit={() => dispatch('result', true)}>
     <ModalHeader label="deContact Protocoll Action" title={heading} />
@@ -63,5 +76,6 @@
                 if (detail.text === CancelOperationButtonText) dispatch('result', false);
                 if (detail.text === OnlyHandoutMyDataButtonText) dispatch('result', "ONLY_HANDOUT");
             }}
+            primaryButtonDisabled={buttonDisabled}
     />
 </ComposedModal>
