@@ -155,11 +155,16 @@ async function handleMessage (dContactMessage) {
     let result, data, requesterDB
     if (messageObj.recipient === _orbitdb.identity.id){
         switch (messageObj.command) {
-            case REQUEST_ADDRESS:
+            case REQUEST_ADDRESS:            
                 data = JSON.parse(messageObj.data)
-
                 requesterDB = await _orbitdb.open(data.sharedAddress, {
-                    type: 'documents',sync: true})
+                    type: 'documents',sync: true})                     
+                    
+                const isRes = await isResipientInSenderDB(requesterDB, messageObj) 
+                    console.log("___out", isRes) 
+                    
+                if (isRes == true)
+                break;    
 
                 result = await confirm({
                     data:messageObj,
@@ -190,6 +195,24 @@ async function handleMessage (dContactMessage) {
                 console.error(`Unknown command: ${messageObj.command}`);
         }
     }
+}
+
+
+async function  isResipientInSenderDB (requesterDB, messageObj){
+
+    const records = await requesterDB.all()
+
+        if(records.length!=0){
+            const isRecipient = records.filter(element => {
+                    return element.value.owner === messageObj.recipient
+            });          
+
+            if(isRecipient.length != 0 ){
+                 return true  
+            }else{
+                return false
+            }
+        }
 }
 
 /**
