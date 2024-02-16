@@ -98,6 +98,7 @@ test.describe('Simple exchange of adress between Alice and Bob', () => {
 		//await page2.getByRole('button', { name: 'Scan Contact' }).click({ timeout: 150000 });
 
 		await page.getByRole('button', { name: 'Exchange Contact Data' }).click({ timeout: 50000 });
+		await page2.getByRole('button', { name: 'Exchange Contact Data' }).click({ timeout: 50000 });
 		
 		//await page2.getByRole('button', { name: 'Scan Contact' }).click({ timeout: 50000 });
 
