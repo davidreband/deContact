@@ -18,6 +18,10 @@
     let businessCard
     let buttonDisabled
 
+    /**
+     * //TODO if Alice db is encrypted, Bob cannot read it? What we are going todo here?
+     * //TODO if the DID is a publicKey of Bob, we can encrypt those data with Bobs public key and only Bob can decrypt it.
+     */
     const getBusinessCard = async () => {
         const businessCardElements = await db.all();
         const filteredElements = businessCardElements.filter(element => {
