@@ -1,20 +1,20 @@
-name: Self hosted runner
+name: Basic Tests
 on:
   push:
-    branches: [ githubCI, playwright, develop ]    
+    branches: [ develop, main ]
   pull_request:
-    branches: [ githubCI, playwright, develop ]    
-
+    branches: [ develop, main ]
 jobs:
-  build:
+  build-deploy-test:
     timeout-minutes: 60
-    runs-on: deContact
+    runs-on: ubuntu-latest
+
     permissions:
       pages: write      # to deploy to Pages
       id-token: write   # to verify the deployment originates from an appropriate source
       actions: read
     environment:
-      name: github-pages
+      name: dcontact #github-pages
       url: ${{ steps.deployment.outputs.page_url }} 
     env:
       VITE_SEED_NODES:  ${{ secrets.VITE_SEED_NODES }} 
@@ -39,7 +39,7 @@ jobs:
     - uses: actions/deploy-pages@v4
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps  
-    #- name: Start test BasicAddressExchange.spec.js
-    #  run: npx playwright test BasicAddressExchange.spec.js
+    - name: Start test BasicAddressExchange.spec.js
+      run: npx playwright test BasicAddressExchange.spec.js
     - name: Start test MyDevicesAutoSync.spec.js 
       run: npx playwright test MyDevicesAutoSync.spec.js 
