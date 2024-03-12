@@ -33,7 +33,10 @@
         getBusinessCard(db).then(bc => businessCard=bc)
     }
     onMount(()=>{
-        dispatch("addressExchangeOpened")
+        //fetchBusinessCard();
+        dispatch("addressExchangeOpened", true)     
+
+        console.log("___add")
     })
 </script>
 <ComposedModal open on:close={() => dispatch('result', false)} on:submit={() => dispatch('result', true)}>
