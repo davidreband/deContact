@@ -4,7 +4,6 @@ import { OrbitDBAccessController, useAccessController} from '@orbitdb/core';
 import { LevelBlockstore } from "blockstore-level"
 import { LevelDatastore } from "datastore-level";
 import { bitswap } from '@helia/block-brokers'
-import { config } from "../../config.js";
 import { fromString, toString } from 'uint8arrays';
 import {
     libp2p,
@@ -21,10 +20,11 @@ import {
     progressState,
     subscriberList, dbMessages, selectedTab, syncedDevices,
 } from "../../stores.js";
-
+import {config} from "../../config.js";
 import { confirm } from "../components/addressModal.js"
 import { notify, sha256 } from "../../utils/utils.js";
 import { getIdentityAndCreateOrbitDB } from "$lib/network/getIdendityAndCreateOrbitDB.js";
+
 
 let blockstore = new LevelBlockstore("./helia-blocks")
 let datastore = new LevelDatastore("./helia-data")
@@ -47,32 +47,6 @@ async function getAddressRecords() {
         console.log("records in dbMyAddressBook ",addressRecords)
     } catch (e) {
         console.log("something isn't yet correctly setup inside dbMyAddressBook")
-    }
-}
-
-/**
- * Loop through our address book and filter all addresses where others are the owners
- * @param ourDID our DID
- * @returns {Promise<void>}
- */
-async function initReplicationOfSubscriberDBs(ourDID) {
-    console.log("replicateSubsriberDBs")
-    const addressRecords = await _dbMyAddressBook.all();
-    _subscriberList = addressRecords.filter((addr)=> {
-        return addr.value.owner !== ourDID && addr.value.sharedAddress!==undefined //sharedAddress undefined for all not decentralized addresses
-    })
-    console.log("_subscriberList",_subscriberList)
-    subscriberList.set(_subscriberList)
-    for (const s in _subscriberList) {
-        const dbAddress = _subscriberList[s].value.sharedAddress
-        console.log("loading subscribers db s",dbAddress)
-        try{
-            _subscriberList[s].db = await _orbitdb.open(dbAddress, {type: 'documents',sync: true})
-            _subscriberList[s].db.all().then((records)=> { //replicate the addresses of Bob, Peter etc.
-                console.log(`dbAddress: ${dbAddress} records`,records)
-            })
-        }catch(e){console.log(`error while loading ${dbAddress} `)}
-
     }
 }
 
@@ -139,7 +113,7 @@ export async function startNetwork() {
         sync: true,
         AccessController: OrbitDBAccessController({ write: [_orbitdb.identity.id]})
     })
-    console.log("dbMyAddressBook",_dbMyAddressBook)
+    // console.log("dbMyAddressBook",_dbMyAddressBook)
     dbMyAddressBook.set(_dbMyAddressBook)
     window.dbMyAddressBook = _dbMyAddressBook
     await getAddressRecords()
@@ -155,6 +129,32 @@ export async function startNetwork() {
         getAddressRecords()
     })
 }
+
+/**
+ * Loop through our address book and filter all other's addresses
+ * @param ourDID our DID
+ * @returns {Promise<void>}
+ */
+async function initReplicationOfSubscriberDBs(ourDID) {
+    // console.log("replicateSubsriberDBs")
+    const addressRecords = await _dbMyAddressBook.all();
+    _subscriberList = addressRecords.filter((addr)=> {
+        return addr.value.owner !== ourDID && addr.value.sharedAddress!==undefined //sharedAddress undefined for all not decentralized addresses
+    })
+    // console.log("_subscriberList",_subscriberList)
+    subscriberList.set(_subscriberList)
+    for (const s in _subscriberList) {
+        const dbAddress = _subscriberList[s].value.sharedAddress
+        // console.log("loading subscribers db s",dbAddress)
+        try{
+            _subscriberList[s].db = await _orbitdb.open(dbAddress, {type: 'documents',sync: true})
+            _subscriberList[s].db.all().then((records)=> { //replicate the addresses of Bob, Peter etc.
+                console.log(`dbAddress: ${dbAddress} records`,records)
+            })
+        }catch(e){console.log(`error while loading ${dbAddress} `)}
+
+    }
+}
 async function handleMessage (dContactMessage) {
     console.log("dContactMessage",dContactMessage   )
     if (!dContactMessage) return;
@@ -167,10 +167,9 @@ async function handleMessage (dContactMessage) {
                 requesterDB = await _orbitdb.open(data.sharedAddress, {
                     type: 'documents',sync: true})  
 
-                const isRes = await isRecipientInSenderDB(requesterDB, messageObj)
-                    
-                if (isRes == true)
-                break;        
+                // const isRes = await isRequesterInSenderDB(requesterDB, messageObj) //TODO this seems contradicting we need to think twice again
+                // if (isRes === true)
+                // break;
 
                 result = await confirm({
                     data:messageObj,
@@ -191,7 +190,6 @@ async function handleMessage (dContactMessage) {
                         //await addRequestersContactDataToMyDB(requesterDB,messageObj.sender) //we want to write Alice contact data into our address book same time
                         //TODO in case Bob want's to exchange the data he should just send another request to Alice (just as Alice did)
                     }
-
                     initReplicationOfSubscriberDBs(_orbitdb.identity.id) //init replication of all subscriber ids
 
                 }else{
@@ -204,21 +202,31 @@ async function handleMessage (dContactMessage) {
     }
 }
 
-async function  isRecipientInSenderDB (requesterDB, messageObj){
+/**
+ * Opens the db of the requesterDB (if Alice requests from Bob, Bob opens Alice db)
+ * And if the requester is already in the db we return false (and do not process the message)
+ *
+ * //TODO this seems contradicting at some point - needs solution
+ *
+ * @param requesterDB db of Alice
+ * @param messageObj the message of Alice
+ * @returns {Promise<boolean>}
+ */
+async function  isRequesterInSenderDB (requesterDB, messageObj){
 
     const records = await requesterDB.all()
 
-        if(records.length!=0){
-            const isRecipient = records.filter(element => {
-                    return element.value.owner === messageObj.recipient
-            });          
+    if(records.length !== 0){
 
-            if(isRecipient.length != 0 ){
-                 return true  
-            }else{
-                return false
-            }
-        }
+        const isRecipient = records.filter(element => {
+                return element.value.owner === messageObj.recipient
+        });
+
+        if(isRecipient.length !== 0 )
+             return true
+        else
+            return false
+    }
 }
 
 /**
@@ -282,32 +290,6 @@ export async function writeMyAddressIntoRequesterDB(requesterDB) {
         console.error('Error in writeMyAddressIntoRequesterDB:', error);
     }
 }
-
-/**
- * //TODO remove this since this is probably not needed - we just ask Alice again after Bob get asked by Alice!
- * @param requesterDB
- * @param sender
- * @returns {Promise<void>}
- */
-async function addRequestersContactDataToMyDB(requesterDB,sender){
-    const records = await requesterDB.all()
-    const filteredElements = records.filter(element => {
-        return element.value.owner === sender
-    });
-    const newSubscriber = filteredElements[0].value //Bob is writing it himselfs //TODO better would if Bob would give Alice write permission and Alice would write it herself into Bobs - only then she can update Bobs address
-    newSubscriber.subscriber = true //we mark a subscriber
-    const hash = await _dbMyAddressBook.put(newSubscriber) //TODO we put only the first record of the requester but he might have send more
-    await getAddressRecords()
-    notify(`wrote requesters data to my address db ${hash}`)
-}
-
-async function updateAddressBook(messageObj) {
-    const contactData = JSON.parse(messageObj.data);
-    // const hash = _dbMyAddressBook.put(contactData)
-    await getAddressRecords()
-    notify(`address updated to local ipfs ${hash}`)
-}
-
 let _libp2p;
 libp2p.subscribe((val) => {
     _libp2p = val

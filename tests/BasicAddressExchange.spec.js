@@ -73,14 +73,26 @@ test.describe('Simple exchange of address between Alice and Bob', () => {
 			console.log("no connection Bob")
 		}
 
-		await page2.getByRole('tab', { name: 'Contacts' }).click({ timeout: 250000 });
+		await page2.getByRole('tab', { name: 'Contacts' }).click();
 		await page2.getByRole('textbox', { role: 'scanContact' }).click();
 		await page2.getByRole('textbox', { role: 'scanContact' }).fill(users[0].did);
 		
 		
-		await new Promise(resolve => setTimeout(resolve, 10000)); //TODO is that necessary?
+		//await new Promise(resolve => setTimeout(resolve, 10000)); //TODO is that necessary?
 		//await page2.getByRole('textbox').press('Enter');
-		await page2.getByRole('button', { name: 'Scan Contact' }).click();
+		//await page2.getByRole('button', { name: 'Scan Contact' }).click();
+		await page2.getByRole('button', { name: 'Scan' }).click();
+
+		//await expect(page.getByRole('button', { name: 'Exchange Contact Data' })).toBeVisible({ timeout: 50000 })
+	
+   //await Promise.all([
+   // page.waitForEvent('addressExchange')
+   
+  //]);
+
+
+
+		
 
 	
 		//Exchanging data	
