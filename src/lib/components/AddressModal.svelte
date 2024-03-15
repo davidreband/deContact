@@ -33,7 +33,7 @@
     onMount(() => {
         fetchBusinessCard();
         dispatch("addressExchange");
-        console.log("__________addressExchange")
+        
     });
 </script>
 

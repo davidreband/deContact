@@ -77,18 +77,15 @@ test.describe('Simple exchange of address between Alice and Bob', () => {
 		await page2.getByRole('textbox', { role: 'scanContact' }).click();
 		await page2.getByRole('textbox', { role: 'scanContact' }).fill(users[0].did);
 		
-		
-		//await new Promise(resolve => setTimeout(resolve, 15000)); //TODO is that necessary?
-		//await page2.getByRole('textbox').press('Enter');
-		//await page2.getByRole('button', { name: 'Scan Contact' }).click();
+	
+		await page.waitForTimeout(15000);
 		await page2.getByRole('button', { name: 'Scan' }).click();
-		//await expect(page.getByRole('button', { name: 'Exchange Contact Data' })).toBeVisible({ timeout: 50000 })
-	
+		
    	//await Promise.all([
-   	// page.waitForEvent('addressExchange')   
-  	//]);
-
-	
+   	// page.waitForEvent('addressExchange')  		
+  	//]);	
+		
+			
 		//Exchanging data	
 		try { 
 			await page.getByRole('button', { name: 'Send My Contact Data' }).click();
@@ -96,13 +93,15 @@ test.describe('Simple exchange of address between Alice and Bob', () => {
 			throw new Error("Exchange of Alice's contact information was not successful")		
 		}
 
+		
+
 		try { 
 			await page2.getByRole('button', { name: 'Send My Contact Data' }).click();
 		} catch(error){
 			throw new Error("Exchange of Bob's contact information was not successful")	
 		}
 
-		await page.getByRole('button', { name: 'Cancel' }).click();
+		//await page.getByRole('button', { name: 'Cancel' }).click();
 	});
 
 	test('Bob updates his address and Alice receives the update', async () => {
