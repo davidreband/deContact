@@ -1,7 +1,8 @@
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { createLibp2p } from 'libp2p'
 import { noise } from '@chainsafe/libp2p-noise'
-import { circuitRelayServer } from '@libp2p/circuit-relay-v2'
+import { circuitRelayTransport,circuitRelayServer } from '@libp2p/circuit-relay-v2'
+import { tcp } from '@libp2p/tcp'
 import { webSockets } from '@libp2p/websockets'
 import * as filters from '@libp2p/websockets/filters'
 import { identify } from '@libp2p/identify'
@@ -32,6 +33,8 @@ const server =
 			listen: ['/ip4/0.0.0.0/tcp/12345/ws']
 		},
 		transports: [
+			circuitRelayTransport(),
+			tcp(),
 			webSockets({
 				filter: filters.all
 			})
@@ -43,26 +46,24 @@ const server =
 			// 	list: ['/ip4/159.69.119.82/udp/9090/webrtc-direct/certhash/uEiAIh0DoA5Qk2xTpc_j58KZMvww9CQzN6UNgsJ-DTuM6XQ/p2p/12D3KooWF5fGyE4VeXMhSGd9rCwckyxCVkA6xfoyFJG9DWJis62v']}),
 			pubsubPeerDiscovery({
 				interval: 1000,
-				topics: ['dev-decontact._peer-discovery._p2p._pubsub'], // defaults to ['_peer-discovery._p2p._pubsub']
+				topics: ['dev-dcontact._peer-discovery._p2p._pubsub','dcontact._peer-discovery._p2p._pubsub'], // defaults to ['_peer-discovery._p2p._pubsub']
 				listenOnly: false
 			})
-	],
-	services: {
-		ping: ping({
-			protocolPrefix: 'dContact', // default
-		}),
-		identify: identify(),
-		autoNAT: autoNAT(),
-		dcutr: dcutr(),
-		pubsub: gossipsub({allowPublishToZeroPeers: true, canRelayMessage: true}),
-		relay: circuitRelayServer({
-			reservations: {
-				maxReservations: 5000,
-				reservationTtl: 1000,
-				defaultDataLimit: BigInt(1024 * 1024 * 1024)
-			}
-		})
-	}
+		],
+		services: {
+			ping: ping({ protocolPrefix: 'dContact'}),
+			identify: identify(),
+			autoNAT: autoNAT(),
+			dcutr: dcutr(),
+			pubsub: gossipsub({allowPublishToZeroPeers: true, canRelayMessage: true}),
+			relay: circuitRelayServer({
+				reservations: {
+					maxReservations: 5000,
+					reservationTtl: 1000,
+					defaultDataLimit: BigInt(1024 * 1024 * 1024)
+				}
+			})
+		}
 })
 
 server.addEventListener('peer:connect', async event => {
