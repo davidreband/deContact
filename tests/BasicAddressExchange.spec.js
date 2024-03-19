@@ -188,7 +188,7 @@ async function initializeNewPage(browser, user) {
 		const page = await context.newPage();
 		const page_url = process.env.PAGE_URL;
 
-console.log("___url", process.env.PAGE_URL)
+console.log("___url", page_url)
 console.log("____node", process.env.VITE_SEED_NODES)
 console.log("___PUPSUB", process.env.VITE_P2P_PUPSUB)
 
