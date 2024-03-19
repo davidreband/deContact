@@ -59,7 +59,7 @@ test.describe('Simple exchange of address between Alice and Bob', () => {
 	});
 
 	test('Alice and Bob can exchange addresses', async () => {
-		test.setTimeout(50000);
+		test.setTimeout(50000); 
 
 		try { 
 			await page.getByRole('img', { name: 'Swarm connected' }).click({ timeout: 50000 });
