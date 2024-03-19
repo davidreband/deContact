@@ -19,7 +19,7 @@ import {
 } from "../../stores.js";
 import { config } from "../../config.js";
 import { confirm } from "../components/addressModal.js"
-import { notify, sha256 } from "../../utils/utils.js";
+import {notify, sha256} from "../../utils/utils.js";
 import { getIdentityAndCreateOrbitDB } from "$lib/network/getIdendityAndCreateOrbitDB.js";
 
 let blockstore = new LevelBlockstore("./helia-blocks")
@@ -134,14 +134,23 @@ async function processMessageQueue() {
             switch (messageObj.command) {
                 case REQUEST_ADDRESS:
                     data = JSON.parse(messageObj.data);
-
                     requesterDB = await _orbitdb.open(data.sharedAddress, { type: 'documents', sync: true });
-
                     // Mark this sender as having an active confirmation
                     activeConfirmations[sender] = true;
 
-                    if(data.onBoardingToken===undefined)
-                        result = 'ONLY_HANDOUT'
+                    if(messageObj.onBoardingToken!==undefined){
+                        //TODO "mytoken" should be a unique sessionId
+                        //TODO "onBoardingToken
+                        const onBoardingSignatureValid = await _orbitdb.identity.verify(messageObj.onBoardingToken,_orbitdb.identity.publicKey,"mytoken")
+                        console.log("onBoardingToken signature valid",onBoardingSignatureValid)
+                        if(onBoardingSignatureValid)
+                            result = 'ONLY_HANDOUT'
+                        else {
+                            notify(`onboarding signature was not valid - somebody wanted to steal your contact data`);
+                            return //don't do anything
+                        }
+
+                    }
                     else
                         result = await confirm({ data: messageObj, db: requesterDB });
                     if(result){
@@ -167,7 +176,6 @@ async function processMessageQueue() {
                     } else{
                         //TODO send "rejected sending address"
                     }
-
                     break;
                 default:
                     console.error(`Unknown command: ${messageObj.command}`);
@@ -271,12 +279,11 @@ export const requestAddress = async (_scannedAddress,nopingpong, onBoardingToken
     try {
         console.log("request requestAddress from", _scannedAddress);
         const data = { sharedAddress:_dbMyAddressBook.address }
-
-        console.log("data",data)
         const msg = await createMessage(REQUEST_ADDRESS, scannedAddress,data);
         if(onBoardingToken!==undefined) msg.onBoardingToken = onBoardingToken
         if(nopingpong===true) msg.nopingpong = true
         await _dbMyAddressBook.access.grant("write",scannedAddress) //the requested did (to write into my address book)
+
         //look if a dummy is inside
         const all = await _dbMyAddressBook.all()
         const foundDummy = all.filter((it) => { return it.value.owner === scannedAddress})
@@ -287,10 +294,14 @@ export const requestAddress = async (_scannedAddress,nopingpong, onBoardingToken
                 firstName: 'invited',
                 lastName: scannedAddress
             }
+            if(onBoardingToken!==undefined) dummyContact.onBoardingToken = onBoardingToken
+
             dummyContact._id = await sha256(JSON.stringify(dummyContact));
             await _dbMyAddressBook.put(dummyContact)
         }
-        await _libp2p.services.pubsub.publish(CONTENT_TOPIC+"/"+scannedAddress,fromString(JSON.stringify(msg))) //TODO when publishing a message sign content and enrypt content
+
+        //TODO when publishing, sign and encrypt message
+        await _libp2p.services.pubsub.publish(CONTENT_TOPIC+"/"+scannedAddress,fromString(JSON.stringify(msg)))
         startInvitationCheckWorker()
         notify(`sent SEND_ADDRESS_REQUEST to ${scannedAddress}`);
     } catch (error) {
@@ -314,13 +325,15 @@ function startInvitationCheckWorker() {
 
         if (invitedContacts.length === 0) {
             console.log("No 'invited' contacts found, stopping the worker...");
-            clearInterval(intervalId); // Stop the interval
-            return; // Exit the function
+            clearInterval(intervalId);
+            return;
         }
 
         for (const contact of invitedContacts) {
             const data = { sharedAddress: _dbMyAddressBook.address };
             const msg = await createMessage(REQUEST_ADDRESS, contact.value.owner, data);
+            if(contact?.value?.onBoardingToken) msg.onBoardingToken = contact.value.onBoardingToken
+            
             await _libp2p.services.pubsub.publish(CONTENT_TOPIC + "/" + contact.value.owner, fromString(JSON.stringify(msg)));
             console.log(`Resent address request to ${contact.value.owner}`);
         }
