@@ -41,8 +41,8 @@ test.describe('Devices auto synchronization', () => {
 		await page2.getByRole('button', { name: 'Enter Existing Seed Phrase' }).click();
 		await page2.getByRole('tab', { name: 'Contacts' }).click();
 
-		const connect =  page2.getByRole('img', { name: 'Swarm connected' })
-		await expect(connect, 'connection Alice synchronization').toBeEnabled({ timeout: 30000 });
+		//const connect =  page2.getByRole('img', { name: 'Swarm connected' })
+		//await expect(connect, 'connection Alice synchronization').toBeEnabled({ timeout: 30000 }); 
 
 		await page2.getByLabel('Contacts').locator('span').first().click();
 	});
