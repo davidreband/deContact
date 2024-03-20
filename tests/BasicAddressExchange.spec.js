@@ -162,7 +162,7 @@ async function fillForm(page, user) {
 }
 
 async function initializeNewPage(browser, user) {
-	try {
+	
 		const context = await browser.newContext();
 		const page = await context.newPage();
 		const page_url = process.env.PAGE_URL;
@@ -180,8 +180,6 @@ async function initializeNewPage(browser, user) {
 		await fillForm(page, user);
 		await page.getByRole('button', { name: 'Add' }).click({ timeout: 50000 });
 		return page;
-	} catch (error) {
-		console.error('Error opening new page:', error);
-	}
+	
 }
 
