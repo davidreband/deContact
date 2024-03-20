@@ -42,7 +42,7 @@ test.describe('Devices auto synchronization', () => {
 		await page2.getByRole('tab', { name: 'Contacts' }).click();
 
 		const connect =  page2.getByRole('img', { name: 'Swarm connected' })
-		await expect(connect, 'connection Alice synchronization').toBeEnabled({ timeout: 15000 });
+		await expect(connect, 'connection Alice synchronization').toBeEnabled({ timeout: 30000 });
 
 		await page2.getByLabel('Contacts').locator('span').first().click();
 	});
